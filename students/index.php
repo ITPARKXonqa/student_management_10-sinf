@@ -1,3 +1,19 @@
+<?php
+    session_start();
+    require "../config/db.php";
+
+    if(!isset($_SESSION['user_id'])){
+        header("Location: auth/login.php");
+        exit();
+    }     
+
+    // sql yozish
+    $sql = "SELECT * FROM students ORDER BY id DESC";
+    $data = $conn->prepare($sql);
+    $data->execute();
+    $students = $data->fetchAll();
+
+?>
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -106,35 +122,22 @@
         </thead>
 
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>Ali Valiyev</td>
-                <td>18</td>
-                <td>10-A</td>
-                <td>+998901234567</td>
-                <td>Toshkent</td>
-                <td>2026-04-02</td>
-                <td class="actions">
-                    <a href="#" class="view">Ko'rish</a>
-                    <a href="#" class="edit">Tahrirlash</a>
-                    <a href="#" class="delete">O'chirish</a>
-                </td>
-            </tr>
-
-            <tr>
-                <td>2</td>
-                <td>Vali Aliyev</td>
-                <td>17</td>
-                <td>9-B</td>
-                <td>+998909876543</td>
-                <td>Samarqand</td>
-                <td>2026-04-01</td>
-                <td class="actions">
-                    <a href="#" class="view">Ko'rish</a>
-                    <a href="#" class="edit">Tahrirlash</a>
-                    <a href="#" class="delete">O'chirish</a>
-                </td>
-            </tr>
+            <?php foreach($students as $item): ?>
+                <tr>
+                    <td><?= $item['id'] ?></td>
+                    <td><?= $item['full_name'] ?></td>
+                    <td><?= $item['age'] ?></td>
+                    <td><?= $item['class_name'] ?></td>
+                    <td><?= $item['phone'] ?></td>
+                    <td><?= $item['address'] ?></td>
+                    <td><?= date("d.M.Y", strtotime($item['created_at']))  ?></td>
+                    <td class="actions">
+                        <a href="#" class="view">Ko'rish</a>
+                        <a href="#" class="edit">Tahrirlash</a>
+                        <a href="#" class="delete">O'chirish</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>
