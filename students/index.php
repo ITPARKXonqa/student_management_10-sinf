@@ -12,6 +12,7 @@
     $data = $conn->prepare($sql);
     $data->execute();
     $students = $data->fetchAll();
+    $cnt = 1;
 
 ?>
 <!DOCTYPE html>
@@ -124,7 +125,7 @@
         <tbody>
             <?php foreach($students as $item): ?>
                 <tr>
-                    <td><?= $item['id'] ?></td>
+                    <td><?= $cnt++ ?></td>
                     <td><?= $item['full_name'] ?></td>
                     <td><?= $item['age'] ?></td>
                     <td><?= $item['class_name'] ?></td>
@@ -132,9 +133,9 @@
                     <td><?= $item['address'] ?></td>
                     <td><?= date("d.M.Y", strtotime($item['created_at']))  ?></td>
                     <td class="actions">
-                        <a href="#" class="view">Ko'rish</a>
-                        <a href="#" class="edit">Tahrirlash</a>
-                        <a href="#" class="delete">O'chirish</a>
+                        <a href="show.php?id=<?= $item['id'] ?>" class="view">Ko'rish</a>
+                        <a href="edit.php?id=<?= $item['id'] ?>" class="edit">Tahrirlash</a>
+                        <a href="delete.php?id=<?= $item['id'] ?>" class="delete" onclick="return confirm('Rostdan ham o\'chirmoqchimisiz')">O'chirish</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
